@@ -2,6 +2,7 @@ import re
 import requests
 
 # Basic url validator
+# to do: add command-line interface, specify url validation regex further and/or handle errors better
 
 def check_url_formatting(url):
     """
@@ -30,3 +31,12 @@ def check_url_validity(url):
         print("Please enter a valid url.")
         return None
 
+def run_url_checker():
+    """Get user input url and check validity"""
+    print("Welcome to the URL validator.")
+    url_input = input("Please enter a URL: ")
+    print("Checking URL validity.")
+    response = check_url_validity(url_input)
+    print(response)
+
+run_url_checker()
