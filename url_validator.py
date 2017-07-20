@@ -2,7 +2,7 @@ import re
 import requests
 
 # Basic url validator
-# to do: add command-line interface, specify url validation regex further and/or handle errors better
+# to do: specify url validation regex further and/or handle errors better
 
 def check_url_formatting(url):
     """
@@ -21,15 +21,17 @@ def check_url_validity(url):
     """Accept url and pass through steps to determine validity."""
     match = check_url_formatting(url)
     if match:
-        response = check_request_status(url)
-        if response == 200:
-            print("Your url is formatted correctly and returned a 200 status code.")
-        else:
-            print("Your url is formatted correctly but returned status code {}.".format(response))
-        return response
+        return check_request_status(url)
     else:
-        print("Please enter a valid url.")
         return None
+
+def validation_message(response):
+    if response == None:
+        return "Your URL is invalid. Please enter a valid url."
+    elif response == 200:
+        return "Your URL is formatted correctly and returned a 200 status code."
+    else:
+        return "Your URL is formatted correctly but returned status code {}.".format(response)
 
 def run_url_checker():
     """Get user input url and check validity"""
@@ -37,6 +39,7 @@ def run_url_checker():
     url_input = input("Please enter a URL: ")
     print("Checking URL validity.")
     response = check_url_validity(url_input)
-    print(response)
+    print(validation_message(response))
+
 
 run_url_checker()
