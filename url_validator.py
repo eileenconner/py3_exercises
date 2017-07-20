@@ -2,7 +2,7 @@ import re
 import requests
 
 # Basic url validator
-# to do: specify url validation regex further and/or handle errors better
+# to do: specify url validation regex further
 
 def check_url_formatting(url):
     """
@@ -14,8 +14,11 @@ def check_url_formatting(url):
 
 def check_request_status(url):
     """Send request to determine validity of request response."""
-    request = requests.get(url)
-    return request.status_code
+    try:
+        request = requests.get(url)
+        return request.status_code
+    except requests.exceptions.ConnectionError:
+        return 1
 
 def check_url_validity(url):
     """Accept url and pass through steps to determine validity."""
@@ -23,11 +26,13 @@ def check_url_validity(url):
     if match:
         return check_request_status(url)
     else:
-        return None
+        return 0
 
 def validation_message(response):
-    if response == None:
+    if response == 0:
         return "Your URL is invalid. Please enter a valid url."
+    elif response == 1:
+        return "Your URL is formatted correctly but failed to establish a connection."
     elif response == 200:
         return "Your URL is formatted correctly and returned a 200 status code."
     else:
